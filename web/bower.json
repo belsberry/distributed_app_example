@@ -1,0 +1,21 @@
+{
+  "name": "web",
+  "version": "0.0.0",
+  "homepage": "https://github.com/belsberry/distributed_app_example",
+  "authors": [
+    "Ben Elsberry <ben.elsberry@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "socket.io-client": "~1.3.5",
+    "knockout": "~3.3.0",
+    "jquery": "~2.1.4"
+  }
+}
