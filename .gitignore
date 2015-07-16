@@ -2,3 +2,5 @@
 node_modules
 bower_components
 *.pyc
+npm-debug.log
+web/public/lib

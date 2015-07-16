@@ -9,4 +9,5 @@ router.get("/discussions", function(req, res){
   res.json(data);
 });
 
+
 module.exports.routes = router;

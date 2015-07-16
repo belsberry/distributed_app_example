@@ -5,6 +5,7 @@ app.discussions = (function(){
     self.socket = io();
     self.discussions = ko.observableArray([]);
 
+    console.log("");
     function loadDiscussions(){
       $.ajax({
         type: "GET",
