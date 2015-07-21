@@ -6,16 +6,15 @@ connection = pika.BlockingConnection(pika.ConnectionParameters("localhost"))
 
 channel = connection.channel()
 
-channel.exchange_declare(exchange="discussionAdded",
+channel.exchange_declare(exchange="discussionEvents",
                          type="fanout")
 
 channel.queue_declare(queue="addDiscussion")
 
-
 def callback(ch, method, properties, body):
     print("[x] Received {0}".format(body))
-    channel.basic_publish(exchange="discussionAdded",
-                          routing_key="",
+    channel.basic_publish(exchange="discussionEvents",
+                          routing_key="discussionAdded",
                           body="Complete: {0}".format(body))
 
 

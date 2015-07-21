@@ -4,13 +4,14 @@ connection = pika.BlockingConnection(pika.ConnectionParameters("localhost"))
 
 channel = connection.channel()
 
-channel.exchange_declare(exchange="hello_complete",
+channel.exchange_declare(exchange="discussionEvents",
                          type="fanout")
 
-channel.queue_declare(queue="web_routing")
+channel.queue_declare(queue="webDiscussionComplete")
 
-channel.queue_bind(exchange="hello_complete",
-                   queue="web_routing")
+channel.queue_bind(exchange="discussionEvents",
+                   routing_key="discussionAdded",
+                   queue="webDiscussionComplete")
 
 
 def callback(ch, method, properties, body):
@@ -18,7 +19,7 @@ def callback(ch, method, properties, body):
 
 
 channel.basic_consume(callback,
-                      queue="web_routing",
+                      queue="webDiscussionComplete",
                       no_ack=True)
 
 channel.start_consuming()

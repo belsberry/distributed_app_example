@@ -1,3 +1,6 @@
 amqp==1.4.6
+ODBCCommandWrapper==0.1.0
 pika==0.9.14
+pyodbc==3.0.7
+virtualenv==13.0.1
 wheel==0.24.0

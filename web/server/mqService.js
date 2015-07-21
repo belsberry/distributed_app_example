@@ -1,48 +1,65 @@
-var amqp = require("amqp");
+var amqp = require("amqplib");
 
 
-module.export = function MessageQueueService(){
+module.exports = function MessageQueueService(){
 
   var self = this;
+  var EXCHANGE_NAME = "discussionEvents";
+  var EXCHANGE_OPTIONS  = { durable: false };
+  var QUEUE_DEFAULT_OPTIONS = { durable: false, autoDelete: true };
   self.events = {};
   self.queues = [];
 
+  self.connection = null;
+  self.channel = null;
+
   self.on = function(evnt, callback){
-    if(self.connection){
-      self.queues.push(self.connection.queue(evnt, callback));
-    }
     self.events[evnt] = callback;
   }
 
-  self.connection = null;
-
-  function subscribeQueue(evnt, callback){
-    //TODO create the exchange and bind a unique queue to it.
-    self.connection.queue(evnt, function(queue){
-      queue.subscribe(function(message, headers, deliveryInfo, data){
-        data = JSON.parse(data);
-        callback(data);
+  function subscribeQueue(evnt, channel, callback){
+    var queueName = "web-" + evnt;
+    channel.assertQueue(queueName, QUEUE_DEFAULT_OPTIONS).then(function(){
+      return channel.bindQueue(queueName, EXCHANGE_NAME, evnt);
+    }).then(function(){
+      return channel.consume(queueName, function(msg){
+        callback(msg.content.toString());
       });
     });
   }
 
-  self.connect = function(){
-    if(!self.connection){
-      self.connection = amqp.createConnection({url: "localhost"});
-      self.connection.on("ready", function(){
-        for(var evnt in self.events){
-          self.queues.push(subscribeQueue(evnt, self.events[evnt]));
-        }
-      });
-    }
+  function createConnectionAndChannel(){
+    return amqp.connect("amqp://localhost").then(function(conn){
+      return conn.createChannel();
+    });
   }
 
-  self.sendCommand = function(command, data, callback){
-    if(!self.connection){
-      callback("connection is not open. Call connect first");
-    }
+  self.connect = function(callback){
+    createConnectionAndChannel().then(function(channel){
+        console.log("connection ready");
+        channel.assertExchange(EXCHANGE_NAME, "fanout", EXCHANGE_OPTIONS).then(function(){
+          for(var evnt in self.events){
+            subscribeQueue(evnt, channel, self.events[evnt]);
+          }
+          callback();
+        }, function(err)
+        {
+          console.log(err);
+        });
+      }, function(err) { console.log(err); });
 
-    self.connection.publish(command, JSON.stringify(data), {}, callback);
+  }
+
+
+  self.sendCommand = function(command, data, callback){
+    createConnectionAndChannel().then(function(channel){
+      var buf = new Buffer(data);
+      var ok = channel.sendToQueue(command, buf);
+
+      channel.close().then(function(){channel.connection.close();});
+
+    });
+
   }
 
 }
