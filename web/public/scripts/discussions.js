@@ -4,8 +4,7 @@ app.discussions = (function(){
     var self = this;
     self.socket = io();
     self.discussions = ko.observableArray([]);
-
-    console.log("");
+    self.newDiscussion = ko.observable({});
     function loadDiscussions(){
       $.ajax({
         type: "GET",
@@ -20,8 +19,15 @@ app.discussions = (function(){
         }
       });
     }
+
+    self.addDiscussion = function(){
+      self.socket.emit("addDiscussion", JSON.stringify(self.newDiscussion()));
+      self.newDiscussion({});
+    }
+
     function registerPushCallbacks(){
-      self.socket.on("newDiscussion", function(discussion){
+      self.socket.on("discussionAdded", function(discussion){
+        var discussion = JSON.parse(discussion);
         self.discussions.push(discussion);
       });
     }

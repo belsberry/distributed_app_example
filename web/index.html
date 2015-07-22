@@ -4,6 +4,9 @@
   <head>
   </head>
   <body>
+    <label>Topic <input type="text" data-bind="value: newDiscussion().topic" /></label>
+    <button data-bind="click: addDiscussion">Add</button>
+  
     <table>
       <thead>
         <tr>
@@ -19,7 +22,8 @@
           <td data-bind="text: numberOfComments"></td>
         </tr>
       </tbody>
-    </table>
+
+      </table>
     <script src="/bower_components/socket.io-client/socket.io.js"></script>
     <script src="/bower_components/jquery/dist/jquery.js"></script>
     <script src="/bower_components/knockout/dist/knockout.js"></script>

@@ -41,7 +41,10 @@ module.exports = function MessageQueueService(){
           for(var evnt in self.events){
             subscribeQueue(evnt, channel, self.events[evnt]);
           }
-          callback();
+          if(callback){
+              callback();
+          }
+
         }, function(err)
         {
           console.log(err);
@@ -53,9 +56,8 @@ module.exports = function MessageQueueService(){
 
   self.sendCommand = function(command, data, callback){
     createConnectionAndChannel().then(function(channel){
-      var buf = new Buffer(data);
+      var buf = new Buffer(JSON.stringify(data));
       var ok = channel.sendToQueue(command, buf);
-
       channel.close().then(function(){channel.connection.close();});
 
     });

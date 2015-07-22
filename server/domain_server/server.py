@@ -12,10 +12,10 @@ channel.exchange_declare(exchange="discussionEvents",
 channel.queue_declare(queue="addDiscussion")
 
 def callback(ch, method, properties, body):
-    print("[x] Received {0}".format(body))
+    print("[x] Domain Received {0}".format(body))
     channel.basic_publish(exchange="discussionEvents",
                           routing_key="discussionAdded",
-                          body="Complete: {0}".format(body))
+                          body=body)
 
 
 channel.basic_consume(callback,

@@ -3,4 +3,6 @@ node_modules
 bower_components
 *.pyc
 npm-debug.log
-web/public/lib
+/web/public/lib
+/lib
+/Scripts

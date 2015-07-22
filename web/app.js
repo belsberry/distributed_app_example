@@ -7,10 +7,6 @@ var SocketEventApi = require("./server/socketEvents");
 var mqService = require("./server/mqService");
 
 
-
-
-
-
 app.get("/", function(req, res){
   res.sendFile(__dirname + "/index.html");
 });
@@ -22,13 +18,13 @@ app.use("/public", express.static("public"));
 
 
 var messageQueue = new mqService();
+var socketEventEmitter = new SocketEventApi(messageQueue, io);
+
 messageQueue.connect();
 
-var sockEventEmitter = new SocketEventApi(messageQueue, io);
-
+io.socketEventEmitter = socketEventEmitter;
 io.on("connection", function(socket){
-  console.log("Socket connected");
-  socketEventEmitter.registerSocket(socket);
+  io.socketEventEmitter.registerSocket(socket);
 });
 
 
