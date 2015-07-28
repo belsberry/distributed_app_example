@@ -6,3 +6,7 @@ npm-debug.log
 /web/public/lib
 /lib
 /Scripts
+/bin
+/include
+.Python
+pip-selfcheck.json

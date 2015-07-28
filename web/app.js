@@ -10,7 +10,9 @@ var MongoClient = require("mongodb").MongoClient;
 
 var messageQueue = new mqService();
 var socketEventEmitter = new SocketEventApi(messageQueue, io);
-var connectionString = "mongodb://localhost:27017/discussions";
+
+var connectionString = process.ENV.MONGO_CONNECTION_STRING || "mongodb://localhost:27017/discussions";
+
 var server;
 var db;
 
@@ -37,7 +39,7 @@ MongoClient.connect(connectionString, function(err, databaseConnection){
   io.on("connection", function(socket){
     io.socketEventEmitter.registerSocket(socket);
   });
-  
+
   server = http.listen(process.env.PORT || 8000, function(){
     console.log("server listening on port %s ", server.address().port);
   });

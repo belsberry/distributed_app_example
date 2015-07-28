@@ -1,0 +1,4 @@
+#activate the windows virtualenv.
+#Call with "source win_activate"
+
+source Scripts/activate
