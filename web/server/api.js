@@ -1,12 +1,13 @@
 var express = require("express");
 var router = express.Router();
+var assert = require("assert");
 
 router.get("/discussions", function(req, res){
-  var data = [
-    {"id": "1", "topic": "Making progress on things", "numberOfComments": 34},
-    {"id": "2", "topic": "The Second of many to come", "numberOfComments": 44}
-  ];
-  res.json(data);
+  var discussions = req.db.collection("discussions");
+  discussions.find({}).toArray(function(err, docs){
+    assert.equal(err, null);
+    res.json(docs);
+  });
 });
 
 

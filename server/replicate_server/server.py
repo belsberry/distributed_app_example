@@ -1,4 +1,6 @@
 import pika
+import json
+from  pymongo import MongoClient
 
 print("starting replicate server")
 
@@ -16,7 +18,14 @@ channel.queue_bind(exchange="discussionEvents",
                    queue="replicateDiscussionAdded")
 
 def callback(ch, method, properties, body):
-    print("[x] Received {0}".format(body))
+    db = MongoClient("mongodb://localhost:27017")
+    discussions = db.discussions
+    coll_discussions = discussions.discussions
+    new_discussion = json.loads(body)
+    coll_discussions.insert_one(new_discussion)
+
+
+
 
 channel.basic_consume(callback,
                       queue="replicateDiscussionAdded",
