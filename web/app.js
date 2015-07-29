@@ -11,7 +11,7 @@ var MongoClient = require("mongodb").MongoClient;
 var messageQueue = new mqService();
 var socketEventEmitter = new SocketEventApi(messageQueue, io);
 
-var connectionString = process.ENV.MONGO_CONNECTION_STRING || "mongodb://localhost:27017/discussions";
+var connectionString = process.env.MONGO_CONNECTION_STRING || "mongodb://localhost:27017/discussions";
 
 var server;
 var db;
