@@ -4,7 +4,7 @@ bower_components
 *.pyc
 npm-debug.log
 /web/public/lib
-lib
+/lib
 /Scripts
 /bin
 /include
