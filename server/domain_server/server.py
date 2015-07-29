@@ -1,5 +1,9 @@
 import pika
 
+import servicebus.handler
+
+servicebus.handler.say_hello()
+
 print("starting domain server")
 
 connection = pika.BlockingConnection(pika.ConnectionParameters("localhost"))

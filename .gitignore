@@ -10,3 +10,5 @@ npm-debug.log
 /include
 .Python
 pip-selfcheck.json
+
+/server/lib/servicebus/build
