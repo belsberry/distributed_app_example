@@ -10,22 +10,19 @@ class Message(object):
 
     def deserialize(self, str_data):
         data = self.data_parser.parse_data(str_data)
-        return self._deserialize(data)
+        return self._load(data)
 
     def _serialize(self):
         """
             Must override and return a data dictionary
         """
-        raise NotImplemented("Must override")
+        raise "Must override"
 
-    def _deserialize(self, data_dict):
+    def _load(self, data_dict):
         """
-            Must override and use to populate properties
+            Must override and use to populate properties from the wire
         """
-        raise NotImplemented("Must override")
+        raise "Must override"
 
-class Command(Message):
-    pass
-
-class Event(Message):
-    pass
+    def get_message_type_name(self):
+        raise "Must override"
